@@ -40,14 +40,12 @@ class PaginacionSimulacionApp:
         tk.Label(self.root, text="Se espera un valor de 10, 50 o 100").pack(pady=5)
         num_procesos = [10, 50, 100]
         ttk.Combobox(self.root, textvariable=self.process_count_var, values=num_procesos).pack(pady=5)
-        #tk.Spinbox(self.root, from_=10, to=100, textvariable=self.process_count_var).pack(pady=5)
 
         # Número de operaciones a simular
         tk.Label(self.root, text="Cantidad de operaciones N:").pack(pady=5)
         tk.Label(self.root, text="Se espera un valor de 500, 1000 o 5000").pack(pady=5)
         num_operaciones = [500, 1000, 5000]
         ttk.Combobox(self.root, textvariable=self.operations_count_var, values=num_operaciones).pack(pady=5)
-        #tk.Spinbox(self.root, from_=500, to=5000, textvariable=self.operations_count_var).pack(pady=5)
 
         # Botón para iniciar la simulación
         tk.Button(self.root, text="Iniciar Simulación", command=self.start_simulation).pack(pady=20)
@@ -59,7 +57,7 @@ class PaginacionSimulacionApp:
             self.file_path_var.set(file_path)
 
     def start_simulation(self):
-        # Verificar los parámetros antes de iniciar la simulación
+        # Verifica los parámetros antes de iniciar la simulación
         if not self.seed_var.get():
             messagebox.showwarning("Advertencia", "Por favor, ingrese una semilla para random.")
             return
@@ -79,26 +77,20 @@ class PaginacionSimulacionApp:
         operations_count = self.operations_count_var.get()
         file_path = self.file_path_var.get()
 
-        # Aquí se puede agregar la lógica para leer el archivo o generar los procesos
-        # y operaciones si no se proporcionó un archivo.
-        
+       
         messagebox.showinfo("Simulación iniciada", f"Simulación iniciada con el algoritmo {algorithm}.\nProcesos: {process_count}\nOperaciones: {operations_count}")
         
-        # A continuación, se puede abrir la ventana de simulación o iniciar la lógica de la simulación.
-        # Esto es un esqueleto que debes completar con la lógica específica de la simulación.
+
         self.run_simulation(algorithm, process_count, operations_count, file_path)
 
     def run_simulation(self, algorithm, process_count, operations_count, file_path):
-        # Aquí va la lógica de la simulación. 
-        # Deberás implementar la lógica para los algoritmos de paginación y la gestión de la MMU.
+
         print(f"Iniciando simulación con {algorithm}, {process_count} procesos, {operations_count} operaciones.")
         if file_path:
             print(f"Usando archivo de operaciones: {file_path}")
         else:
             print("Generando operaciones aleatoriamente.")
         
-        # Lógica de simulación por implementar...
-        # Puedes abrir una nueva ventana de tkinter para visualizar el estado de la simulación.
         pass
 
 if __name__ == "__main__":
