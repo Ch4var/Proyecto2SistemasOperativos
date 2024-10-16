@@ -110,7 +110,7 @@ class PaginacionSimulacionApp:
             self.ram_canvas_alg.create_rectangle(i*7, 0, (i+1)*7, 20, fill=color, outline="black")
 
         buttons_frame = tk.Frame(self.sim_window)
-        buttons_frame.pack(pady=5)
+        buttons_frame.pack(pady=2)
 
         self.pause_button = tk.Button(buttons_frame, text="Pausar", command=self.toggle_pause)
         self.pause_button.pack(side="left", padx=10)
@@ -223,129 +223,129 @@ class PaginacionSimulacionApp:
 
         # Sección de estadísticas del algoritmo óptimo
         optimal_algo_frame = tk.Frame(stats_frame)
-        optimal_algo_frame.grid(row=0, column=0, padx=10, pady=5)
+        optimal_algo_frame.grid(row=0, column=0, padx=10, pady=2)
 
-        tk.Label(optimal_algo_frame, text="Algoritmo Óptimo").grid(row=0, column=0, padx=5, pady=5, columnspan=4)
+        tk.Label(optimal_algo_frame, text="Algoritmo Óptimo").grid(row=0, column=0, padx=5, pady=2, columnspan=4)
 
         # Tabla de estadísticas del algoritmo óptimo
         opt_stats_frame = tk.Frame(optimal_algo_frame)
-        opt_stats_frame.grid(row=1, column=0, padx=10, pady=5)
+        opt_stats_frame.grid(row=1, column=0, padx=10, pady=2)
 
-        tk.Label(opt_stats_frame, text="Processes").grid(row=0, column=0, padx=5, pady=5)
-        tk.Label(opt_stats_frame, text="Sim-Time").grid(row=0, column=1, padx=5, pady=5)
+        tk.Label(opt_stats_frame, text="Processes").grid(row=0, column=0, padx=5, pady=2)
+        tk.Label(opt_stats_frame, text="Sim-Time").grid(row=0, column=1, padx=5, pady=2)
 
         self.opt_processes_label = tk.Label(opt_stats_frame, text="0")
-        self.opt_processes_label.grid(row=1, column=0, padx=5, pady=5)
+        self.opt_processes_label.grid(row=1, column=0, padx=5, pady=2)
         
         self.opt_sim_time_label = tk.Label(opt_stats_frame, text="0s")
-        self.opt_sim_time_label.grid(row=1, column=1, padx=5, pady=5)
+        self.opt_sim_time_label.grid(row=1, column=1, padx=5, pady=2)
 
         # Tabla de RAM y V-RAM del algoritmo óptimo
         self.opt_memory_frame = tk.Frame(optimal_algo_frame)
-        self.opt_memory_frame.grid(row=2, column=0, padx=10, pady=5)
+        self.opt_memory_frame.grid(row=2, column=0, padx=10, pady=2)
 
-        tk.Label(self.opt_memory_frame, text="RAM KB").grid(row=0, column=0, padx=5, pady=5)
-        tk.Label(self.opt_memory_frame, text="RAM %").grid(row=0, column=1, padx=5, pady=5)
-        tk.Label(self.opt_memory_frame, text="V-RAM KB").grid(row=0, column=2, padx=5, pady=5)
-        tk.Label(self.opt_memory_frame, text="V-RAM %").grid(row=0, column=3, padx=5, pady=5)
+        tk.Label(self.opt_memory_frame, text="RAM KB").grid(row=0, column=0, padx=5, pady=2)
+        tk.Label(self.opt_memory_frame, text="RAM %").grid(row=0, column=1, padx=5, pady=2)
+        tk.Label(self.opt_memory_frame, text="V-RAM KB").grid(row=0, column=2, padx=5, pady=2)
+        tk.Label(self.opt_memory_frame, text="V-RAM %").grid(row=0, column=3, padx=5, pady=2)
 
         self.opt_ram_kb_label = tk.Label(self.opt_memory_frame, text="0 KB")
-        self.opt_ram_kb_label.grid(row=1, column=0, padx=5, pady=5)
+        self.opt_ram_kb_label.grid(row=1, column=0, padx=5, pady=2)
 
         self.opt_ram_percent_label = tk.Label(self.opt_memory_frame, text="0%")
-        self.opt_ram_percent_label.grid(row=1, column=1, padx=5, pady=5)
+        self.opt_ram_percent_label.grid(row=1, column=1, padx=5, pady=2)
 
         self.opt_vram_kb_label = tk.Label(self.opt_memory_frame, text="0 KB")
-        self.opt_vram_kb_label.grid(row=1, column=2, padx=5, pady=5)
+        self.opt_vram_kb_label.grid(row=1, column=2, padx=5, pady=2)
 
         self.opt_vram_percent_label = tk.Label(self.opt_memory_frame, text="0%")
-        self.opt_vram_percent_label.grid(row=1, column=3, padx=5, pady=5)
+        self.opt_vram_percent_label.grid(row=1, column=3, padx=5, pady=2)
 
         # Tabla de páginas, thrashing y fragmentación del algoritmo seleccionado
         opt_pages_frame = tk.Frame(optimal_algo_frame)
-        opt_pages_frame.grid(row=3, column=0, padx=10, pady=5)
+        opt_pages_frame.grid(row=3, column=0, padx=10, pady=2)
 
-        tk.Label(opt_pages_frame, text="PAGES").grid(row=0, column=0, padx=5, pady=5)
-        tk.Label(opt_pages_frame, text="Thrashing").grid(row=0, column=2, padx=5, pady=5)
-        tk.Label(opt_pages_frame, text="Fragmentación").grid(row=0, column=3, padx=5, pady=5)
+        tk.Label(opt_pages_frame, text="PAGES").grid(row=0, column=0, padx=5, pady=2)
+        tk.Label(opt_pages_frame, text="Thrashing").grid(row=0, column=2, padx=5, pady=2)
+        tk.Label(opt_pages_frame, text="Fragmentación").grid(row=0, column=3, padx=5, pady=2)
 
-        tk.Label(opt_pages_frame, text="LOADED").grid(row=1, column=0, padx=5, pady=5)
-        tk.Label(opt_pages_frame, text="UNLOADED").grid(row=1, column=1, padx=5, pady=5)
+        tk.Label(opt_pages_frame, text="LOADED").grid(row=1, column=0, padx=5, pady=2)
+        tk.Label(opt_pages_frame, text="UNLOADED").grid(row=1, column=1, padx=5, pady=2)
 
         self.opt_pages_loaded_label = tk.Label(opt_pages_frame, text="0")
-        self.opt_pages_loaded_label.grid(row=2, column=0, padx=5, pady=5)
+        self.opt_pages_loaded_label.grid(row=2, column=0, padx=5, pady=2)
 
         self.opt_pages_unloaded_label = tk.Label(opt_pages_frame, text="0")
-        self.opt_pages_unloaded_label.grid(row=2, column=1, padx=5, pady=5)
+        self.opt_pages_unloaded_label.grid(row=2, column=1, padx=5, pady=2)
 
         self.opt_thrashing_label = tk.Label(opt_pages_frame, text="0s (0%)", bg="white")
-        self.opt_thrashing_label.grid(row=2, column=2, padx=5, pady=5)
+        self.opt_thrashing_label.grid(row=2, column=2, padx=5, pady=2)
 
         self.opt_fragmentation_label = tk.Label(opt_pages_frame, text="0 KB")
-        self.opt_fragmentation_label.grid(row=2, column=3, padx=5, pady=5)
+        self.opt_fragmentation_label.grid(row=2, column=3, padx=5, pady=2)
 
         # Sección de estadísticas del algoritmo seleccionado
         selected_algo_frame = tk.Frame(stats_frame)
-        selected_algo_frame.grid(row=0, column=1, padx=10, pady=5)
+        selected_algo_frame.grid(row=0, column=1, padx=10, pady=2)
 
-        tk.Label(selected_algo_frame, text="Algoritmo Seleccionado").grid(row=0, column=0, padx=5, pady=5, columnspan=4)
+        tk.Label(selected_algo_frame, text="Algoritmo Seleccionado").grid(row=0, column=0, padx=5, pady=2, columnspan=4)
 
         # Tabla de procesos y tiempo de simulación del algoritmo seleccionado
         processes_frame = tk.Frame(selected_algo_frame)
-        processes_frame.grid(row=1, column=0, padx=10, pady=5)
+        processes_frame.grid(row=1, column=0, padx=10, pady=2)
 
-        tk.Label(processes_frame, text="Processes").grid(row=0, column=0, padx=5, pady=5)
-        tk.Label(processes_frame, text="Sim-Time").grid(row=0, column=1, padx=5, pady=5)
+        tk.Label(processes_frame, text="Processes").grid(row=0, column=0, padx=5, pady=2)
+        tk.Label(processes_frame, text="Sim-Time").grid(row=0, column=1, padx=5, pady=2)
 
         self.processes_label = tk.Label(processes_frame, text="0")
-        self.processes_label.grid(row=1, column=0, padx=5, pady=5)
+        self.processes_label.grid(row=1, column=0, padx=5, pady=2)
         
         self.sim_time_label = tk.Label(processes_frame, text="0s")
-        self.sim_time_label.grid(row=1, column=1, padx=5, pady=5)
+        self.sim_time_label.grid(row=1, column=1, padx=5, pady=2)
 
         # Tabla de RAM y V-RAM del algoritmo seleccionado
         memory_frame = tk.Frame(selected_algo_frame)
-        memory_frame.grid(row=2, column=0, padx=10, pady=5)
+        memory_frame.grid(row=2, column=0, padx=10, pady=2)
 
-        tk.Label(memory_frame, text="RAM KB").grid(row=0, column=0, padx=5, pady=5)
-        tk.Label(memory_frame, text="RAM %").grid(row=0, column=1, padx=5, pady=5)
-        tk.Label(memory_frame, text="V-RAM KB").grid(row=0, column=2, padx=5, pady=5)
-        tk.Label(memory_frame, text="V-RAM %").grid(row=0, column=3, padx=5, pady=5)
+        tk.Label(memory_frame, text="RAM KB").grid(row=0, column=0, padx=5, pady=2)
+        tk.Label(memory_frame, text="RAM %").grid(row=0, column=1, padx=5, pady=2)
+        tk.Label(memory_frame, text="V-RAM KB").grid(row=0, column=2, padx=5, pady=2)
+        tk.Label(memory_frame, text="V-RAM %").grid(row=0, column=3, padx=5, pady=2)
 
         self.ram_kb_label = tk.Label(memory_frame, text="0 KB")
-        self.ram_kb_label.grid(row=1, column=0, padx=5, pady=5)
+        self.ram_kb_label.grid(row=1, column=0, padx=5, pady=2)
 
         self.ram_percent_label = tk.Label(memory_frame, text="0%")
-        self.ram_percent_label.grid(row=1, column=1, padx=5, pady=5)
+        self.ram_percent_label.grid(row=1, column=1, padx=5, pady=2)
 
         self.vram_kb_label = tk.Label(memory_frame, text="0 KB")
-        self.vram_kb_label.grid(row=1, column=2, padx=5, pady=5)
+        self.vram_kb_label.grid(row=1, column=2, padx=5, pady=2)
 
         self.vram_percent_label = tk.Label(memory_frame, text="0%")
-        self.vram_percent_label.grid(row=1, column=3, padx=5, pady=5)
+        self.vram_percent_label.grid(row=1, column=3, padx=5, pady=2)
 
         # Tabla de páginas, thrashing y fragmentación del algoritmo seleccionado
         pages_frame = tk.Frame(selected_algo_frame)
-        pages_frame.grid(row=3, column=0, padx=10, pady=5)
+        pages_frame.grid(row=3, column=0, padx=10, pady=2)
 
-        tk.Label(pages_frame, text="PAGES").grid(row=0, column=0, padx=5, pady=5)
-        tk.Label(pages_frame, text="Thrashing").grid(row=0, column=2, padx=5, pady=5)
-        tk.Label(pages_frame, text="Fragmentación").grid(row=0, column=3, padx=5, pady=5)
+        tk.Label(pages_frame, text="PAGES").grid(row=0, column=0, padx=5, pady=2)
+        tk.Label(pages_frame, text="Thrashing").grid(row=0, column=2, padx=5, pady=2)
+        tk.Label(pages_frame, text="Fragmentación").grid(row=0, column=3, padx=5, pady=2)
 
-        tk.Label(pages_frame, text="LOADED").grid(row=1, column=0, padx=5, pady=5)
-        tk.Label(pages_frame, text="UNLOADED").grid(row=1, column=1, padx=5, pady=5)
+        tk.Label(pages_frame, text="LOADED").grid(row=1, column=0, padx=5, pady=2)
+        tk.Label(pages_frame, text="UNLOADED").grid(row=1, column=1, padx=5, pady=2)
 
         self.pages_loaded_label = tk.Label(pages_frame, text="0")
-        self.pages_loaded_label.grid(row=2, column=0, padx=5, pady=5)
+        self.pages_loaded_label.grid(row=2, column=0, padx=5, pady=2)
 
         self.pages_unloaded_label = tk.Label(pages_frame, text="0")
-        self.pages_unloaded_label.grid(row=2, column=1, padx=5, pady=5)
+        self.pages_unloaded_label.grid(row=2, column=1, padx=5, pady=2)
 
         self.thrashing_label = tk.Label(pages_frame, text="0s (0%)", bg="white")
-        self.thrashing_label.grid(row=2, column=2, padx=5, pady=5)
+        self.thrashing_label.grid(row=2, column=2, padx=5, pady=2)
 
         self.fragmentation_label = tk.Label(pages_frame, text="0 KB")
-        self.fragmentation_label.grid(row=2, column=3, padx=5, pady=5)
+        self.fragmentation_label.grid(row=2, column=3, padx=5, pady=2)
 
     def toggle_pause(self):
         if self.simulation_paused:
