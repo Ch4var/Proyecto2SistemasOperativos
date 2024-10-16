@@ -11,11 +11,16 @@ def print_pages(page_list):
         print(page)
 
 class Page:
-    def __init__(self, page_id, pid, frag):
+    def __init__(self, page_id, pid, frag, l_addr, l_time):
         self.page_id = page_id
         self.pid = pid
         self.in_ram = True  # Indica si la página está en RAM o no
+        self.flag = False
         self.frag = frag
+        self.l_addr = l_addr
+        self.m_addr = None
+        self.d_addr = None
+        self.l_time = l_time
     
     def __str__(self):
         return f"Page ID: {self.page_id}, Process ID: {self.pid}, In RAM: {self.in_ram}"
@@ -90,16 +95,22 @@ class FIFO(MMU):
             else:
                 frag = 0
             
-            page = Page(page_id, pid, frag)
+            page = Page(page_id, pid, frag, ptr, self.total_time)
             
             if len(self.real_memory) < NUM_PAGES:
                 self.real_memory.append(page)
+                page.m_addr = self.real_memory.index(page)
                 self.total_time += 1
+
             else:
                 replaced_page = self.real_memory.pop(0)
                 replaced_page.in_ram = False
+                replaced_page.m_addr = None
+                replaced_page.l_time = None
                 self.virtual_memory.append(replaced_page)
+                replaced_page.d_addr = self.virtual_memory.index(replaced_page)
                 self.real_memory.append(page)
+                page.m_addr = self.real_memory.index(page)
                 self.total_time += 5
                 self.total_thrashing += 5
 
@@ -126,10 +137,15 @@ class FIFO(MMU):
                 if len(self.real_memory) >= NUM_PAGES:
                     evicted_page = self.real_memory.pop(0)
                     evicted_page.in_ram = False
+                    evicted_page.m_addr = None
+                    evicted_page.l_time = None
                     self.virtual_memory.append(evicted_page)
+                    evicted_page.d_addr = self.virtual_memory.index(evicted_page)
 
                 self.real_memory.append(page)
                 page.in_ram = True
+                page.m_addr = self.real_memory.index(page)
+                page.l_time = self.total_time
 
                 for virtual_page in self.virtual_memory:
                     if virtual_page.page_id == page.page_id:
@@ -156,14 +172,16 @@ class SECOND_CHANCE(MMU):
             else:
                 frag = 0
             
-            page = Page(page_id, pid, frag)
+            page = Page(page_id, pid, frag, ptr, self.total_time)
             
             if len(self.real_memory) < NUM_PAGES:
                 page.in_ram = True
                 self.real_memory.append(page)
+                page.m_addr = self.real_memory.index(page)
                 self.total_time += 1
             else:
                 self.replace_page(page)
+                page.m_addr = self.real_memory.index(page)
                 self.total_time += 5
                 self.total_thrashing += 5
 
@@ -180,11 +198,16 @@ class SECOND_CHANCE(MMU):
             if front_page.flag:  
                 front_page.flag = False
                 self.real_memory.append(front_page)
+                new_page.m_addr = self.real_memory.index(new_page)
             else:
                 front_page.in_ram = False
+                front_page.m_addr = None
+                front_page.l_time = None
                 self.virtual_memory.append(front_page) 
+                front_page.d_addr = self.virtual_memory.index(front_page)
                 new_page.in_ram = True
                 self.real_memory.append(new_page)
+                new_page.m_addr = self.real_memory.index(new_page)
                 break  
 
     def use(self, ptr):
@@ -205,6 +228,8 @@ class SECOND_CHANCE(MMU):
                     self.replace_page(page)
 
                 page.flag = True
+                page.m_addr = self.real_memory.index(page)
+                page.l_time = self.total_time
 
                 for virtual_page in self.virtual_memory:
                     if virtual_page.page_id == page.page_id:
@@ -232,18 +257,25 @@ class MRU(MMU):
             else:
                 frag = 0
             
-            page = Page(page_id, pid, frag)
+            page = Page(page_id, pid, frag, ptr, self.total_time)
 
             if len(self.real_memory) < NUM_PAGES:
                 page.in_ram = True
                 self.real_memory.insert(0, page)
+                page.m_addr = self.real_memory.index(page)
                 self.total_time += 1
             else:
                 replaced_page = self.real_memory.pop(0)
                 replaced_page.in_ram = False
+                replaced_page.m_addr = None
+                replaced_page.l_time = None
+                self.virtual_memory.append(replaced_page)
+                replaced_page.d_addr = self.virtual_memory.index(replaced_page)
+
                 page.in_ram = True
                 self.real_memory.insert(0, page)
-                self.virtual_memory.append(replaced_page)
+                page.m_addr = self.real_memory.index(page)
+
                 self.total_time += 5
                 self.total_thrashing += 5
 
@@ -265,6 +297,7 @@ class MRU(MMU):
                 self.total_time += 1
                 self.real_memory.remove(page)
                 self.real_memory.insert(0, page)
+                page.m_addr = self.real_memory.index(page)
             else:
                 self.total_time += 5
                 self.total_thrashing += 5
@@ -272,10 +305,15 @@ class MRU(MMU):
                 if len(self.real_memory) >= NUM_PAGES:
                     replaced_page = self.real_memory.pop(0)
                     replaced_page.in_ram = False
+                    replaced_page.m_addr = None
+                    replaced_page.l_time = None
                     self.virtual_memory.append(replaced_page)
+                    replaced_page.d_addr = self.virtual_memory.index(replaced_page)
 
-                page.in_ram = True
                 self.real_memory.insert(0, page)
+                page.in_ram = True
+                page.m_addr = self.real_memory.index(page)
+                page.l_time = self.total_time
 
                 for virtual_page in self.virtual_memory:
                     if virtual_page.page_id == page.page_id:
@@ -303,19 +341,26 @@ class RND(MMU):
             else:
                 frag = 0
             
-            page = Page(page_id, pid, frag)
+            page = Page(page_id, pid, frag, ptr, self.total_time)
 
             if len(self.real_memory) < NUM_PAGES:
                 page.in_ram = True
                 self.real_memory.append(page)
+                page.m_addr = self.real_memory.index(page)
                 self.total_time += 1
             else:
                 replaced_index = random.randint(0, len(self.real_memory) - 1)
                 replaced_page = self.real_memory.pop(replaced_index)
                 replaced_page.in_ram = False
-                page.in_ram = True
-                self.real_memory.append(page)
+                replaced_page.m_addr = None
+                replaced_page.l_time = None
                 self.virtual_memory.append(replaced_page)
+                replaced_page.d_addr = self.virtual_memory.index(replaced_page)
+
+                self.real_memory.append(page)
+                page.in_ram = True
+                page.m_addr = self.real_memory.index(page)
+
                 self.total_time += 5
                 self.total_thrashing += 5
 
@@ -343,10 +388,15 @@ class RND(MMU):
                     replaced_index = random.randint(0, len(self.real_memory) - 1)
                     replaced_page = self.real_memory.pop(replaced_index)
                     replaced_page.in_ram = False
+                    replaced_page.m_addr = None
+                    replaced_page.l_time = None
                     self.virtual_memory.append(replaced_page)
+                    replaced_page.d_addr = self.virtual_memory.index(replaced_page)
 
-                page.in_ram = True
                 self.real_memory.append(page)
+                page.in_ram = True
+                page.m_addr = self.real_memory.index(page)
+                page.l_time = self.total_time
 
                 for virtual_page in self.virtual_memory:
                     if virtual_page.page_id == page.page_id:
@@ -365,7 +415,7 @@ def generar_procesos_y_operaciones(P, N):
         nuevas_operaciones, ptr_counter = generar_operaciones_para_proceso(pid, num_ops, ptr_counter)
         procesos += nuevas_operaciones
         total_ops += len(nuevas_operaciones)
-    print("TOTAL OPSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS", len(procesos))
+        
     return procesos
 
 def generar_operaciones_para_proceso(pid, num_ops, ptr_counter):
@@ -377,7 +427,7 @@ def generar_operaciones_para_proceso(pid, num_ops, ptr_counter):
 
     while len(operaciones) < num_ops and not kill_realizado:
         
-        if i >= umbral_kill and not kill_realizado:
+        if i >= umbral_kill:
             operacion = random.choice(["new", "use", "delete", "kill"])
         else:
             operacion = random.choice(["new", "use"])
@@ -446,8 +496,8 @@ def ejecutar_simulacion(algoritmo, operaciones):
             if ptr in punteros:
                 mmu.use(ptr)
                 # print(f"Usando puntero {ptr}")
-            # else:
-            #     print(f"Error: puntero {ptr} no existe")
+            else:
+                print(f"Error: puntero {ptr} no existe")
 
         elif "delete" in operacion:
             # delete(ptr)
@@ -456,8 +506,8 @@ def ejecutar_simulacion(algoritmo, operaciones):
                 mmu.delete(ptr)
                 # print(f"Eliminado puntero {ptr}")
                 del punteros[ptr]
-            # else:
-            #     print(f"Error: puntero {ptr} no existe o ya ha sido eliminado")
+            else:
+                print(f"Error: puntero {ptr} no existe o ya ha sido eliminado")
 
         elif "kill" in operacion:
             # kill(pid)
@@ -495,7 +545,7 @@ def main():
                 f.write(f"{operacion}\n")
         print(f"Operaciones escritas en {archivo_salida}")
 
-    print(operaciones)
+    # print(operaciones)
     # Ejecutar la simulación
     ejecutar_simulacion(algoritmo, operaciones)
 
