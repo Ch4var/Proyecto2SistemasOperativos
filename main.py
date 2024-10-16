@@ -83,7 +83,7 @@ class PaginacionSimulacionApp:
         ram_label_opt = ttk.Label(self.visual_frame, text="RAM - OPT", font=('Arial', 10, 'bold'))
         ram_label_opt.pack(pady=5)
 
-        self.ram_canvas_opt = tk.Canvas(self.visual_frame, width=700, height=20)
+        self.ram_canvas_opt = tk.Canvas(self.visual_frame, width=700, height=15)
         self.ram_canvas_opt.pack(pady=5)
         
         for i in range(100): 
@@ -102,7 +102,7 @@ class PaginacionSimulacionApp:
         ram_label_alg = ttk.Label(self.visual_frame, text=texto, font=('Arial', 10, 'bold'))
         ram_label_alg.pack(pady=5)
 
-        self.ram_canvas_alg = tk.Canvas(self.visual_frame, width=700, height=20)
+        self.ram_canvas_alg = tk.Canvas(self.visual_frame, width=700, height=15)
         self.ram_canvas_alg.pack(pady=5)
         
         for i in range(100):
@@ -144,7 +144,8 @@ class PaginacionSimulacionApp:
         combined_state.sort(key=lambda page: page.pid)
 
         for page in combined_state:
-            page_id = page.page_id
+            _, page_num = map(int, page.page_id.split('-'))
+            page_id = page_num
             pid = page.pid
             in_ram = "X" if page.in_ram else ""
             l_addr = page.l_addr
@@ -179,7 +180,8 @@ class PaginacionSimulacionApp:
         combined_state.sort(key=lambda page: page.pid)
 
         for page in combined_state:
-            page_id = page.page_id
+            _, page_num = map(int, page.page_id.split('-'))
+            page_id = page_num
             pid = page.pid
             in_ram = "X" if page.in_ram else ""
             l_addr = page.l_addr
