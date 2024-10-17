@@ -436,7 +436,7 @@ class PaginacionSimulacionApp:
         thrashing_percentage = (step_data['thrashing_time'] / step_data['total_simulation_time'] * 100) if step_data['total_simulation_time'] > 0 else 0
         self.thrashing_label.config(text=f"{step_data['thrashing_time']}s ({thrashing_percentage:.2f}%)")
         if thrashing_percentage > 50:
-            self.thrashing_label.config(bg="red")
+            self.opt_thrashing_label.config(bg="#FF6666")
         else:
             self.thrashing_label.config(bg="white")
 
@@ -461,7 +461,7 @@ class PaginacionSimulacionApp:
         thrashing_percentage_opt = (estado_simulacion_opt['thrashing_time'] / estado_simulacion_opt['total_simulation_time'] * 100) if estado_simulacion_opt['total_simulation_time'] > 0 else 0
         self.opt_thrashing_label.config(text=f"{estado_simulacion_opt['thrashing_time']}s ({thrashing_percentage_opt:.2f}%)")
         if thrashing_percentage_opt > 50:
-            self.opt_thrashing_label.config(bg="red")
+            self.opt_thrashing_label.config(bg="#FF6666")
         else:
             self.opt_thrashing_label.config(bg="white")
 
