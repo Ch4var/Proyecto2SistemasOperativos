@@ -113,10 +113,7 @@ class PaginacionSimulacionApp:
         buttons_frame.pack(pady=2)
 
         self.pause_button = tk.Button(buttons_frame, text="Pausar", command=self.toggle_pause)
-        self.pause_button.pack(side="left", padx=10)
-
-        self.stop_button = tk.Button(buttons_frame, text="Detener Simulación", command=self.stop_simulation)
-        self.stop_button.pack(side="left", padx=10)    
+        self.pause_button.pack(side="left", padx=10)  
 
         self.tabla_opt = self.create_mmu_table("OPT")
         self.tabla_alg = self.create_mmu_table(algoritmo)
