@@ -288,7 +288,7 @@ class PaginacionSimulacionApp:
         selected_algo_frame = tk.Frame(stats_frame)
         selected_algo_frame.grid(row=0, column=1, padx=10, pady=2)
 
-        tk.Label(selected_algo_frame, text="Algoritmo Seleccionado").grid(row=0, column=0, padx=5, pady=2, columnspan=4)
+        tk.Label(selected_algo_frame, text=f"Algoritmo {self.algorithm_var.get()}").grid(row=0, column=0, padx=5, pady=2, columnspan=4)
 
         # Tabla de procesos y tiempo de simulación del algoritmo seleccionado
         processes_frame = tk.Frame(selected_algo_frame)
