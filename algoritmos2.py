@@ -423,6 +423,8 @@ class OPT(MMU):
                 self.total_time += 1
             else:
                 self.replace_page(page)
+                self.total_time += 5
+                self.total_thrashing += 5
 
             pages.append(page)
             self.total_frag += frag
@@ -443,9 +445,8 @@ class OPT(MMU):
             replaced_page.d_addr = self.virtual_memory.index(replaced_page) 
 
             self.real_memory.append(page)
+            replaced_page.in_ram = True
             page.m_addr = self.real_memory.index(page)
-            self.total_time += 5
-            self.total_thrashing += 5
         else:
             replaced_page = self.real_memory.pop(0)
             replaced_page.in_ram = False
@@ -455,10 +456,9 @@ class OPT(MMU):
             replaced_page.d_addr = self.virtual_memory.index(replaced_page)
             
             self.real_memory.append(page)
+            replaced_page.in_ram = True
             page.m_addr = self.real_memory.index(page)
             page.l_time = self.total_time
-            self.total_time += 5
-            self.total_thrashing += 5
 
     def get_future_uses(self):
         future_uses = {}
@@ -491,34 +491,41 @@ class OPT(MMU):
             raise ValueError(f"Pointer {ptr} does not exist in page table.")
 
         pages = self.page_table[ptr]
+
         for page in pages:
             if page.in_ram:
-                self.total_time += 1  # Tiempo de acceso en RAM
+                self.total_time += 1
             else:
-                self.total_time += 5  # Tiempo de acceso en memoria virtual
-                self.total_thrashing += 5
-
+                future_uses = self.get_future_uses()
+                farthest_page_index = self.get_farthest_page_index(future_uses)
+                
                 if len(self.real_memory) >= NUM_PAGES:
-                    evicted_page = self.real_memory.pop(0)
-                    evicted_page.in_ram = False
-                    evicted_page.m_addr = None
-                    evicted_page.l_time = None 
-                    self.virtual_memory.append(evicted_page)
-                    evicted_page.d_addr = self.virtual_memory.index(evicted_page)
+                    if farthest_page_index is not None:
+                        replaced_page = self.real_memory.pop(farthest_page_index)
+                    else:
+                        replaced_page = self.real_memory.pop(0)
+
+                    replaced_page.in_ram = False
+                    replaced_page.m_addr = None
+                    replaced_page.l_time = None
+                    self.virtual_memory.append(replaced_page)
+                    replaced_page.d_addr = self.virtual_memory.index(replaced_page)
 
                 self.real_memory.append(page)
                 page.in_ram = True
-                page.m_addr = self.real_memory.index(page) 
+                page.m_addr = self.real_memory.index(page)
                 page.l_time = self.total_time
-                
-                self.virtual_memory = [vp for vp in self.virtual_memory if vp.page_id != page.page_id]  
+                self.virtual_memory = [vp for vp in self.virtual_memory if vp.page_id != page.page_id]
+
+                self.total_time += 5
+                self.total_thrashing += 5 
     
 def generar_procesos_y_operaciones(P, N):
     procesos = []
     total_ops = 0
     ptr_counter = 0
     ptr_array = []
-    max_ops = 20
+    max_ops = 5
     while total_ops < N:
         pid = random.randint(0, P) 
         num_ops = random.randint(1, N - total_ops) % max_ops
@@ -617,8 +624,6 @@ def ejecutar_simulacion(algoritmo, operaciones):
             
             punteros[ptr] = pid
             punteros_opt[ptr_opt] = pid
-            print(f"Proceso {pid} asignado ptr {ptr} con tamaño {size} KB")
-            print(f"Proceso {pid} (OPT) asignado ptr {ptr_opt} con tamaño {size} KB")
 
         elif "use" in operacion:
             # use(ptr)
@@ -626,8 +631,6 @@ def ejecutar_simulacion(algoritmo, operaciones):
             if ptr in punteros:
                 tiempo = mmu.use(ptr)
                 tiempo_opt = mmu_opt.use(ptr)
-                print(f"Usando puntero {ptr}, tiempo de acceso: {tiempo}")
-                print(f"Usando puntero {ptr} (OPT), tiempo de acceso: {tiempo_opt}")
             else:
                 print(f"Error: puntero {ptr} no existe")
 
@@ -637,8 +640,6 @@ def ejecutar_simulacion(algoritmo, operaciones):
             if ptr in punteros:
                 mmu.delete(ptr)
                 mmu_opt.delete(ptr)
-                print(f"Eliminado puntero {ptr}")
-                print(f"Eliminado puntero {ptr} (OPT)")
                 del punteros[ptr]
                 del punteros_opt[ptr]
             else:
@@ -649,8 +650,6 @@ def ejecutar_simulacion(algoritmo, operaciones):
             pid = int(operacion[5:-1])
             mmu.kill(pid)
             mmu_opt.kill(pid)
-            print(f"Proceso {pid} finalizado")
-            print(f"Proceso {pid} (OPT) finalizado")
             punteros = {ptr: p for ptr, p in punteros.items() if p != pid}
             punteros_opt = {ptr: p for ptr, p in punteros_opt.items() if p != pid}
 
@@ -700,5 +699,4 @@ def ejecutar_simulacion(algoritmo, operaciones):
         yield estado_simulacion, estado_simulacion_opt
 
     # Mostrar el estado final de ambos mmu y mmu_opt
-    mmu.status()
-    mmu_opt.status()
+    
