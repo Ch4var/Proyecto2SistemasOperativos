@@ -44,8 +44,21 @@ class PaginacionSimulacionApp:
         tk.Label(self.root, text="Cantidad de operaciones N:").pack(pady=5)
         ttk.Combobox(self.root, textvariable=self.operations_count_var, values=[500, 1000, 5000]).pack(pady=5)
 
+        self.descargar_bandera = 0
+
+        tk.Button(self.root, text="Descargar archivo", command=self.descargar_archivo).pack(pady=20)
+
         tk.Button(self.root, text="Iniciar Simulación", command=self.iniciar_simulacion).pack(pady=20)
 
+    def descargar_archivo(self): 
+
+        self.descargar_bandera = 1
+        self.operaciones = procesar_archivo_o_generar_procesos(None, self.process_count_var.get(), self.operations_count_var.get())
+
+        with open("archivo_salida.txt", 'w') as f:
+            for operacion in self.operaciones:
+                f.write(f"{operacion}\n")
+    
     def select_file(self):
         file_path = filedialog.askopenfilename(filetypes=[("Archivos de texto", "*.txt"), ("Todos los archivos", "*.*")])
         if file_path:
@@ -365,10 +378,11 @@ class PaginacionSimulacionApp:
 
         algoritmo = self.algorithm_var.get()
 
-        if self.file_path_var.get():
-            operaciones = procesar_archivo_o_generar_procesos(self.file_path_var.get(), self.process_count_var.get(), self.operations_count_var.get())
-        else:
-            operaciones = procesar_archivo_o_generar_procesos(None, self.process_count_var.get(), self.operations_count_var.get())
+        if self.descargar_bandera == 0:
+            if self.file_path_var.get():
+                self.operaciones = procesar_archivo_o_generar_procesos(self.file_path_var.get(), self.process_count_var.get(), self.operations_count_var.get())
+            else:
+                self.operaciones = procesar_archivo_o_generar_procesos(None, self.process_count_var.get(), self.operations_count_var.get())
 
         self.sim_window = tk.Toplevel(self.root)
         self.sim_window.title("Simulación en Progreso")
@@ -383,8 +397,8 @@ class PaginacionSimulacionApp:
 
         self.simulation_data = {
             "algoritmo": algoritmo,
-            "operaciones": operaciones,
-            "sim_step": ejecutar_simulacion(algoritmo, operaciones) 
+            "operaciones": self.operaciones,
+            "sim_step": ejecutar_simulacion(algoritmo, self.operaciones) 
         }
 
         # Iniciar el bucle de simulación usando after()
