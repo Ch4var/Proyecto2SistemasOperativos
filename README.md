@@ -18,18 +18,14 @@ Profesor:
 Este proyecto consiste en la programación 5 algoritmos de paginación y el impacto que pueden tener en el rendimiento de un sistema operativo doméstico. La simulación consiste en la ejecución de dos algoritmos en simultáneo, el algoritmo óptimo y el algoritmo seleccionado por el usuario (FIFO, Second Chance, MRU, y Random), sobre líneas de código que pueden ser cargadas en un archivo, o ser generadas por el mismo programa. Además, el usuario debe agregar la semilla para la ejecución del programa, tiene la opción de cargar un archivo para la lectura de las operaciones, y si no fuera a cargar un archivo, debe seleccionar la cantidad de operaciones y la cantidad de líneas de operaciones que quiere que ambos algoritmos ejecuten. También, tiene la posibilidad de descargar un archivo con la cantidad de operaciones y la cantidad de líneas de operaciones seleccionadas. Luego de esta selección, se va a visualizar la ejecución de ambos algoritmos sobre las operaciones, donde va a tener la opción de pausar la simulación. 
 
 # Compilación:
-Para poder ejecutar el código en el ambiente Fedora Worktstation 40 es necesario instalar la versión más reciente de Python a través del siguiente comando:  
-    
-$ sudo dnf install python3
+Para poder ejecutar el código en el ambiente Fedora Worktstation 40 es necesario darle permisos al archivo llamado setup.sh, el cual es un script que se encarga de instalar la biblioteca de interfaz gráfica Tkinter, esencial para este proyecto, y de otorgarle permisos al programa necesario para la ejecución del programa. Esto se logra abriendo una terminal donde se encuentra el proyecto y ejecutando el siguiente comando: 
 
-Una vez instalado la última versión de Python, es necesario instalar la biblioteca de interfaz gráfica Tkinter, esencial para el proyecto, con el siguiente comando:
-    
-$ sudo dnf install python3-tkinter
+$ chmod +x setup.sh
 
-Una vez realizadas ejecutados ambos comandos, se ejecuta el siguiente comando para otorgarle permisos al programa que contiene el código de ejecución del programa:
+Una vez se le dieron los permisos al archivo se ejecuta el mismo de la siguiente manera:
 
-$ chmod +x main.py
+$ ./setup.sh
 
-Finalmente, para ejecutar el programa, se ejecuta el siguiente comando:
+Deberá ingresar su contraseña y presionar la tecla enter para que comience la instalación de la biblioteca. Finalmente, para ejecutar el programa, se ejecuta el siguiente comando:
 
- $ python main.py
+$ python main.py
