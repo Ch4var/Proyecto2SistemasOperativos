@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 import random, colorsys 
-from algoritmos2 import procesar_archivo_o_generar_procesos, ejecutar_simulacion
+from algoritmos import procesar_archivo_o_generar_procesos, ejecutar_simulacion
 
 class PaginacionSimulacionApp:
     def __init__(self, root):
