@@ -159,9 +159,9 @@ class PaginacionSimulacionApp:
             pid = page.pid
             in_ram = "X" if page.in_ram else ""
             l_addr = page.l_addr
-            m_addr = page.m_addr
-            d_addr = page.d_addr
-            l_time = page.l_time
+            m_addr = page.m_addr if page.m_addr is not None else ""
+            d_addr = page.d_addr if page.d_addr is not None else ""
+            l_time = page.l_time if page.l_time is not None else ""
             flag = "X" if page.flag else ""
 
             row_id = self.tabla_opt.insert('', tk.END, values=(page_id, pid, in_ram, l_addr, m_addr, d_addr, l_time, flag))
@@ -195,9 +195,9 @@ class PaginacionSimulacionApp:
             pid = page.pid
             in_ram = "X" if page.in_ram else ""
             l_addr = page.l_addr
-            m_addr = page.m_addr
-            d_addr = page.d_addr
-            l_time = page.l_time
+            m_addr = page.m_addr if page.m_addr is not None else ""
+            d_addr = page.d_addr if page.d_addr is not None else ""
+            l_time = page.l_time if page.l_time is not None else ""
             flag = "X" if page.flag else ""
 
             row_id = self.tabla_alg.insert('', tk.END, values=(page_id, pid, in_ram, l_addr, m_addr, d_addr, l_time, flag))

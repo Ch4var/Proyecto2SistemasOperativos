@@ -109,6 +109,7 @@ class FIFO(MMU):
                 self.virtual_memory.append(replaced_page)
                 replaced_page.d_addr = self.virtual_memory.index(replaced_page)
                 self.real_memory.append(page)
+                page.d_addr = None
                 page.m_addr = self.real_memory.index(page)
                 self.total_time += 5
                 self.total_thrashing += 5
@@ -142,6 +143,7 @@ class FIFO(MMU):
                     evicted_page.d_addr = self.virtual_memory.index(evicted_page)
 
                 self.real_memory.append(page)
+                page.d_addr = None
                 page.in_ram = True
                 page.m_addr = self.real_memory.index(page)
                 page.l_time = self.total_time
@@ -178,6 +180,7 @@ class SECOND_CHANCE(MMU):
             else:
                 self.replace_page(page)
                 page.m_addr = self.real_memory.index(page)
+                page.d_addr = None
                 self.total_time += 5
                 self.total_thrashing += 5
 
@@ -194,6 +197,7 @@ class SECOND_CHANCE(MMU):
             if front_page.flag:  
                 front_page.flag = False
                 self.real_memory.append(front_page)
+                front_page.d_addr = None
                 front_page.m_addr = self.real_memory.index(front_page)
             else:
                 front_page.in_ram = False
@@ -204,6 +208,7 @@ class SECOND_CHANCE(MMU):
 
                 new_page.in_ram = True
                 self.real_memory.append(new_page)
+                new_page.d_addr = None
                 new_page.m_addr = self.real_memory.index(new_page)
                 new_page.l_time = self.total_time
                 break  
@@ -228,6 +233,7 @@ class SECOND_CHANCE(MMU):
                     page.in_ram = True
                     self.real_memory.append(page)
                     page.m_addr = self.real_memory.index(page)
+                    page.d_addr = None
 
                 page.flag = True
 
@@ -271,6 +277,7 @@ class MRU(MMU):
                 page.in_ram = True
                 self.real_memory.insert(0, page)
                 page.m_addr = self.real_memory.index(page)
+                page.d_addr = None
 
                 self.total_time += 5
                 self.total_thrashing += 5
@@ -307,6 +314,7 @@ class MRU(MMU):
                     replaced_page.d_addr = self.virtual_memory.index(replaced_page)
 
                 self.real_memory.insert(0, page)
+                page.d_addr = None
                 page.in_ram = True
                 page.m_addr = self.real_memory.index(page)
                 page.l_time = self.total_time
@@ -352,6 +360,7 @@ class RND(MMU):
                 page.in_ram = True
                 self.real_memory.append(page)
                 page.m_addr = self.real_memory.index(page)
+                page.d_addr = None
 
                 self.total_time += 5
                 self.total_thrashing += 5
@@ -386,6 +395,7 @@ class RND(MMU):
                     replaced_page.d_addr = self.virtual_memory.index(replaced_page)
 
                 self.real_memory.append(page)
+                page.d_addr = None
                 page.in_ram = True
                 page.m_addr = self.real_memory.index(page)
                 page.l_time = self.total_time
@@ -447,6 +457,7 @@ class OPT(MMU):
             self.real_memory.append(page)
             replaced_page.in_ram = True
             page.m_addr = self.real_memory.index(page)
+            page.d_addr = None
         else:
             replaced_page = self.real_memory.pop(0)
             replaced_page.in_ram = False
@@ -456,9 +467,10 @@ class OPT(MMU):
             replaced_page.d_addr = self.virtual_memory.index(replaced_page)
             
             self.real_memory.append(page)
-            replaced_page.in_ram = True
+            page.in_ram = True
             page.m_addr = self.real_memory.index(page)
             page.l_time = self.total_time
+            page.d_addr = None
 
     def get_future_uses(self):
         future_uses = {}
@@ -512,6 +524,7 @@ class OPT(MMU):
                     replaced_page.d_addr = self.virtual_memory.index(replaced_page)
 
                 self.real_memory.append(page)
+                page.d_addr = None
                 page.in_ram = True
                 page.m_addr = self.real_memory.index(page)
                 page.l_time = self.total_time
@@ -697,6 +710,3 @@ def ejecutar_simulacion(algoritmo, operaciones):
 
         # Retornar ambos estados
         yield estado_simulacion, estado_simulacion_opt
-
-    # Mostrar el estado final de ambos mmu y mmu_opt
-    
