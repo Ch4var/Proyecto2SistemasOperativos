@@ -1,5 +1,7 @@
 import random
 
+global_counter = 0
+
 # Parámetros de la simulación
 PAGE_SIZE = 4 * 1000  # (4 KB)
 RAM_SIZE = 400 * 1000 # (400 KB)
@@ -482,13 +484,17 @@ class OPT(MMU):
                 else:
                     future_uses[ptr] = [idx]
         return future_uses
+    
 
     def get_farthest_page_index(self, future_uses):
-        farthest_use = -1
+        farthest_use = global_counter + 1
         farthest_page_index = None
         for index, page in enumerate(self.real_memory):
             pid, page_num = map(int, page.page_id.split('-'))
             ptr = [ptr for ptr, pages in self.page_table.items() if pages and pages[0].pid == pid]
+            if ptr and ptr[0] not in future_uses:
+                return index
+            
             if ptr and ptr[0] in future_uses:
                 next_use = future_uses[ptr[0]][0]
                 if next_use > farthest_use:
@@ -625,12 +631,14 @@ def ejecutar_simulacion(algoritmo, operaciones):
     punteros = {}
     punteros_opt = {}
     
+    global_counter = 0
+
     # Ejecutar las operaciones
     for operacion in operaciones:
         if "new" in operacion:
             # new(pid, size)
             pid, size = map(int, operacion[4:-1].split(","))
-            
+
             # Ejecutar en mmu y mmu_opt
             ptr = mmu.allocate(pid, size)
             ptr_opt = mmu_opt.allocate(pid, size)
@@ -638,12 +646,17 @@ def ejecutar_simulacion(algoritmo, operaciones):
             punteros[ptr] = pid
             punteros_opt[ptr_opt] = pid
 
+            global_counter += 1
+
         elif "use" in operacion:
             # use(ptr)
+            
             ptr = int(operacion[4:-1])
             if ptr in punteros:
                 tiempo = mmu.use(ptr)
                 tiempo_opt = mmu_opt.use(ptr)
+
+                global_counter += 1
             else:
                 print(f"Error: puntero {ptr} no existe")
 
@@ -653,6 +666,9 @@ def ejecutar_simulacion(algoritmo, operaciones):
             if ptr in punteros:
                 mmu.delete(ptr)
                 mmu_opt.delete(ptr)
+
+                global_counter += 1
+
                 del punteros[ptr]
                 del punteros_opt[ptr]
             else:
@@ -663,6 +679,9 @@ def ejecutar_simulacion(algoritmo, operaciones):
             pid = int(operacion[5:-1])
             mmu.kill(pid)
             mmu_opt.kill(pid)
+
+            global_counter += 1
+
             punteros = {ptr: p for ptr, p in punteros.items() if p != pid}
             punteros_opt = {ptr: p for ptr, p in punteros_opt.items() if p != pid}
 
